@@ -5,6 +5,18 @@ cmake_minimum_required(VERSION 3.10)
 
 project(llm_server_dart_library VERSION 0.0.1 LANGUAGES C CXX)
 
+add_custom_command(
+        OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/output
+        COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/generate_hpp.sh > ${CMAKE_CURRENT_SOURCE_DIR}/output
+        COMMAND_ECHO STDOUT
+        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/generate_hpp.sh
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+add_custom_target(llm_server_dart_library ALL
+        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/output
+)
+
 add_subdirectory(llama.cpp)
 
 set_target_properties(llama PROPERTIES PUBLIC_HEADER llama.cpp/include/llama.h)

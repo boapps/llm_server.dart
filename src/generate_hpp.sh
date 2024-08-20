@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "script run"
+
 # Function to convert a file to a C++ header format
 convert_to_header() {
     input_file=$1
@@ -33,8 +35,8 @@ files=(
     "json-schema-to-grammar.mjs"
 )
 
-cd src/llama.cpp/examples/server
+cd llama.cpp/examples/server
 for file in "${files[@]}"; do
     convert_to_header "public/$file" "$file.hpp"
 done
-cd ../../../..
+cd ../../..
