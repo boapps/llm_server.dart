@@ -9,3 +9,7 @@ The command used was:
 ```
 git subtree add --prefix src/llama.cpp https://github.com/ggerganov/llama.cpp master --squash
 ```
+
+```
+flutter pub run ffigen --config ffigen.yaml
+```

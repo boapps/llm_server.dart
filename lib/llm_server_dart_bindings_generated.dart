@@ -44,11 +44,35 @@ class LlmServerDartBindings {
   late final _start = _startPtr
       .asFunction<int Function(int, ffi.Pointer<ffi.Pointer<ffi.Char>>)>();
 
-  void quit() {
+  int start_embedding(
+    int argc,
+    ffi.Pointer<ffi.Pointer<ffi.Char>> argv,
+  ) {
+    return _start_embedding(
+      argc,
+      argv,
+    );
+  }
+
+  late final _start_embeddingPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int Function(
+              ffi.Int, ffi.Pointer<ffi.Pointer<ffi.Char>>)>>('start_embedding');
+  late final _start_embedding = _start_embeddingPtr
+      .asFunction<int Function(int, ffi.Pointer<ffi.Pointer<ffi.Char>>)>();
+
+  int quit() {
     return _quit();
   }
 
-  late final _quitPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function()>>('quit');
-  late final _quit = _quitPtr.asFunction<void Function()>();
+  late final _quitPtr = _lookup<ffi.NativeFunction<ffi.Int Function()>>('quit');
+  late final _quit = _quitPtr.asFunction<int Function()>();
+
+  int quit_embedding() {
+    return _quit_embedding();
+  }
+
+  late final _quit_embeddingPtr =
+      _lookup<ffi.NativeFunction<ffi.Int Function()>>('quit_embedding');
+  late final _quit_embedding = _quit_embeddingPtr.asFunction<int Function()>();
 }

@@ -15,14 +15,24 @@ Pointer<Pointer<Char>> stringListToPointerPointer(List<String> stringList) {
   return pointerPointer;
 }
 
-_start(List<String> args) => _bindings.start(args.length, stringListToPointerPointer(args));
-start(String modelPath) {
+_start(List<String> args) =>
+    _bindings.start(args.length, stringListToPointerPointer(args));
+start(String modelPath, int port) {
   List<String> args = List.of(["llama-server"]);
-  args.addAll(["-m", modelPath]);
+  args.addAll(["-m", modelPath, "--port", port.toString()]);
   _start(args);
 }
 
+_start_embedding(List<String> args) =>
+    _bindings.start_embedding(args.length, stringListToPointerPointer(args));
+start_embedding(String modelPath, int port) {
+  List<String> args = List.of(["llama-server"]);
+  args.addAll(["-m", modelPath, "--port", port.toString(), '--embedding']);
+  _start_embedding(args);
+}
+
 quit() => _bindings.quit();
+quit_embedding() => _bindings.quit_embedding();
 
 const String _libName = 'llm_server_dart';
 

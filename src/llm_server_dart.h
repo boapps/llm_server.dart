@@ -5,4 +5,6 @@
 #endif
 
 FFI_PLUGIN_EXPORT int start(int argc, char *argv[]);
+FFI_PLUGIN_EXPORT int start_embedding(int argc, char *argv[]);
 FFI_PLUGIN_EXPORT int quit();
+FFI_PLUGIN_EXPORT int quit_embedding();
