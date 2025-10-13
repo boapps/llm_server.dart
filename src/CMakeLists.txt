@@ -1,9 +1,18 @@
 # The Flutter tooling requires that developers have CMake 3.10 or later
 # installed. You should not increase this version, as doing so will cause
 # the plugin to fail to compile for some customers of the plugin.
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.14)
 
 project(llm_server_dart_library VERSION 0.0.1 LANGUAGES C CXX)
+
+# Explicitly disable CUDA to avoid GCC 14 compatibility issues
+set(GGML_CUDA OFF CACHE BOOL "Disable CUDA" FORCE)
+set(GGML_CUBLAS OFF CACHE BOOL "Disable CUBLAS" FORCE)
+
+# set(CMAKE_BUILD_TYPE "Release")
+
+set(GGML_BLAS ON)
+set(GGML_BLAS_VENDOR OpenBLAS)
 
 add_custom_command(
         OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/output
@@ -30,10 +39,10 @@ add_library(llm_server_dart SHARED
 
 target_include_directories(llm_server_dart PRIVATE
         llama.cpp
-        llama.cpp/examples/server
         llama.cpp/include
         llama.cpp/ggml/include
         llama.cpp/common
+        llama.cpp/examples/server
 )
 
 target_link_libraries(llm_server_dart PRIVATE

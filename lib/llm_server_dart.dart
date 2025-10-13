@@ -19,7 +19,14 @@ _start(List<String> args) =>
     _bindings.start(args.length, stringListToPointerPointer(args));
 start(String modelPath, int port) {
   List<String> args = List.of(["llama-server"]);
-  args.addAll(["-m", modelPath, "--port", port.toString()]);
+  args.addAll([
+    "-m",
+    modelPath,
+    "--port",
+    port.toString(),
+    '--chat-template',
+    'chatml'
+  ]);
   _start(args);
 }
 

@@ -55,7 +55,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void startServer() {
-    llm_server_dart.start("gemma-2.gguf");
+    llm_server_dart.start("gemma-2.gguf", 8002);
   }
 
   void stopServer() {
@@ -74,11 +74,11 @@ class _MyAppState extends State<MyApp> {
             padding: const EdgeInsets.all(10),
             child: Column(
               children: [
-                MaterialButton(onPressed: startServer, child: Text('start'),),
-                MaterialButton(onPressed: stopServer, child: Text('stop'),),
+                MaterialButton(onPressed: startServer, child: const Text('start'),),
+                MaterialButton(onPressed: stopServer, child: const Text('stop'),),
                 Text(
                   _data,
-                  style: TextStyle(fontSize: 20),
+                  style: const TextStyle(fontSize: 20),
                 ),
               ],
             ),

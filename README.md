@@ -13,3 +13,7 @@ git subtree add --prefix src/llama.cpp https://github.com/ggerganov/llama.cpp ma
 ```
 flutter pub run ffigen --config ffigen.yaml
 ```
+
+```
+git subtree pull --prefix src/llama.cpp https://github.com/ggerganov/llama.cpp master --squash
+```
