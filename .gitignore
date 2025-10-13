@@ -30,3 +30,4 @@ build/
 
 # Model
 example/gemma-2.gguf
+src/*.hpp

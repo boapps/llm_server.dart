@@ -14,39 +14,54 @@ set(GGML_CUBLAS OFF CACHE BOOL "Disable CUBLAS" FORCE)
 set(GGML_BLAS ON)
 set(GGML_BLAS_VENDOR OpenBLAS)
 
-add_custom_command(
-        OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/output
-        COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/generate_hpp.sh > ${CMAKE_CURRENT_SOURCE_DIR}/output
-        COMMAND_ECHO STDOUT
-        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/generate_hpp.sh
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-)
-
-add_custom_target(llm_server_dart_library ALL
-        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/output
-)
+# Enable building common and tools libraries
+set(LLAMA_BUILD_COMMON ON CACHE BOOL "Build common library" FORCE)
+set(LLAMA_BUILD_TOOLS ON CACHE BOOL "Build tools including mtmd" FORCE)
 
 add_subdirectory(llama.cpp)
 
 set_target_properties(llama PROPERTIES PUBLIC_HEADER llama.cpp/include/llama.h)
 
+# Generate header files from public assets
+set(PUBLIC_ASSETS
+    index.html.gz
+    loading.html
+)
+
+set(PUBLIC_ASSET_HEADERS "")
+foreach(asset ${PUBLIC_ASSETS})
+    set(input "${CMAKE_CURRENT_SOURCE_DIR}/llama.cpp/tools/server/public/${asset}")
+    set(output "${CMAKE_CURRENT_BINARY_DIR}/${asset}.hpp")
+    list(APPEND PUBLIC_ASSET_HEADERS ${output})
+    add_custom_command(
+        DEPENDS "${input}"
+        OUTPUT "${output}"
+        COMMAND "${CMAKE_COMMAND}" "-DINPUT=${input}" "-DOUTPUT=${output}" -P "${CMAKE_CURRENT_SOURCE_DIR}/llama.cpp/scripts/xxd.cmake"
+    )
+    set_source_files_properties(${output} PROPERTIES GENERATED TRUE)
+endforeach()
+
 add_library(llm_server_dart SHARED
         llm_server_dart.c
-        llama.cpp/examples/server/server.cpp
-        llama.cpp/examples/server/utils.hpp
-        llama.cpp/examples/server/httplib.h
+        llama.cpp/tools/server/server.cpp
+        llama.cpp/tools/server/utils.hpp
+        ${PUBLIC_ASSET_HEADERS}
 )
 
 target_include_directories(llm_server_dart PRIVATE
+        ${CMAKE_CURRENT_BINARY_DIR}
         llama.cpp
         llama.cpp/include
         llama.cpp/ggml/include
         llama.cpp/common
-        llama.cpp/examples/server
+        llama.cpp/tools/server
+        llama.cpp/tools/mtmd
+        llama.cpp/vendor
 )
 
 target_link_libraries(llm_server_dart PRIVATE
         common
+        mtmd
         ${CMAKE_THREAD_LIBS_INIT}
 )
 
