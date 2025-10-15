@@ -55,7 +55,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void startServer() {
-    llm_server_dart.start("gemma-2.gguf", 8002);
+    llm_server_dart.start("Qwen3-8B-Q4_K_M.gguf", 8002);
   }
 
   void stopServer() {
